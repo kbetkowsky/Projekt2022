@@ -1,0 +1,40 @@
+﻿@page "/"
+@inject TodoState State
+
+<h1>To Do List</h1>
+
+<EditForm Model="newTodo" OnValidSubmit="AddTodo">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <input placeholder="Something todo" @bind="newTodo.Title" />
+        <ValidationMessage For="@(()=> newTodo.Title)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button> 
+    <button type="button" class="btn btn-danger" disabled="@State.CanClear" @onclick="State.ClearTodos" >Finished</button>
+</EditForm>
+
+<hr />
+
+<ul class="list-group">
+    @foreach (var todo in State.TodoItems)
+    {
+        <li class="list-group-item">
+            <input type="checkbox" @bind="todo.IsDone"/>
+            <span>
+                @todo.Title
+            </span>
+        </li>
+    }
+</ul>
+@code
+{
+    TodoItem newTodo = new();
+
+    
+
+    void AddTodo()
+    {
+        State.AddTodo(newTodo);
+        newTodo = new();
+    }
+}
